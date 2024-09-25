@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Calculator - Input</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9fafb;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #444;
+            margin-bottom: 20px;
+        }
+        input, select {
+            width: calc(50% - 10px);
+            padding: 12px;
+            margin: 8px 5px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        button {
+            padding: 12px;
+            width: 100%;
+            background-color: red; /* Changed to red */
+            color: white;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0px 5px 15px rgba(255, 0, 0, 0.4); /* Red button shadow */
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: darkred; /* Darker red on hover */
+            transform: scale(1.05);
+            box-shadow: 0px 7px 20px rgba(255, 0, 0, 0.6);
+        }
+
+        button:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.5), transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease;
+            z-index: 0;
+        }
+
+        button:hover:before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        button span {
+            position: relative;
+            z-index: 1;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Fitness Calculator</h1>
+        <form id="bmiForm">
+            <input type="text" id="name" placeholder="Enter your name" required>
+            <input type="number" id="age" placeholder="Age" required>
+            <select id="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <input type="number" id="weight" placeholder="Weight in kg" required>
+            <input type="number" id="height" placeholder="Height in cm" required>
+            <button type="submit">Calculate</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('bmiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get input values
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+
+            // Store data in localStorage
+            localStorage.setItem('name', name);
+            localStorage.setItem('age', age);
+            localStorage.setItem('gender', gender);
+            localStorage.setItem('weight', weight);
+            localStorage.setItem('height', height);
+
+            // Redirect to the results page
+            window.location.href = 'result.html';
+        });
+    </script>
+
+</body>
+</html>

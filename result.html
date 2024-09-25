@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Calculator - Result</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9fafb;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            max-width: 600px;
+            width: 100%;
+            text-align: left;
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #6e3b97;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .result-box {
+            border: 2px solid #6e3b97;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .result-box h2 {
+            color: #6e3b97;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        .result-box .kg {
+            font-size: 2rem;
+            color: #6e3b97;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .section-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #333;
+        }
+        .section-value {
+            font-size: 1.2rem;
+            color: #6e3b97;
+            margin-bottom: 5px;
+        }
+        .info {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .calorie-section {
+            margin-top: 20px;
+        }
+        .calorie-section select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .calories {
+            font-size: 1.1rem;
+            color: #6e3b97;
+            font-weight: bold;
+        }
+        button {
+            padding: 12px;
+            width: 100%;
+            background-color: red; /* Changed to red */
+            color: white;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0px 5px 15px rgba(255, 0, 0, 0.4); /* Red button shadow */
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: darkred; /* Darker red on hover */
+            transform: scale(1.05);
+            box-shadow: 0px 7px 20px rgba(255, 0, 0, 0.6);
+        }
+
+        button:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.5), transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease;
+            z-index: 0;
+        }
+
+        button:hover:before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            color: #6e3b97;
+            font-size: 1.2rem;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .highlight {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* Show More Details Button */
+        #details-button {
+            background-color: #6e3b97;
+        }
+        #details-button:hover {
+            background-color: #5a2a7a;
+        }
+
+        /* More Details Section */
+        #more-details {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Personalized Greeting -->
+        <h1>Hey, <span id="user-name">User</span>!</h1>
+        
+        <!-- Result Box -->
+        <div class="result-box">
+            <h2>Your BMI</h2>
+            <div class="kg" id="bmi">0.00</div>
+        </div>
+
+        <!-- Show More Details Button -->
+        <button id="details-button" onclick="showDetails()">Show More Details</button>
+
+        <!-- More Details Section -->
+        <div id="more-details">
+            <table>
+                <tr>
+                    <th>Ideal Weight (Kg)</th>
+                    <th>Your Weight (Kg)</th>
+                    <th>Reduce (Kg)</th>
+                </tr>
+                <tr>
+                    <td id="ideal-weight">0.00</td>
+                    <td id="your-weight">0.00</td>
+                    <td id="reduce-weight" class="highlight">0.00</td>
+                </tr>
+            </table>
+
+            <div class="section">
+                <div class="section-title">Basal Metabolic Rate (BMR)</div>
+                <div class="section-value" id="bmr">0.00 Calories/Day</div>
+                <div class="info">Mifflin-St Jeor Method</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Body Fat Percentage</div>
+                <div class="section-value" id="body-fat">0.00%</div>
+                <div class="info">Normal men 14% - 24% | Normal women 21% - 31%</div>
+            </div>
+
+            <div class="calorie-section">
+                <h2>Recommended Calories Per Day</h2>
+                <select id="activity-level">
+                    <option value="sedentary">Sedentary (Little or no exercise)</option>
+                    <option value="light">Light Exercise (1-3 days/week)</option>
+                    <option value="moderate">Moderate Exercise (3-5 days/week)</option>
+                    <option value="active">Active (6-7 days/week)</option>
+                    <option value="very-active">Very Active (twice/day)</option>
+                </select>
+
+                <div class="section-title">Maintain Weight</div>
+                <div class="calories" id="maintain-calories">0</div>
+
+                <div class="section-title">Mild Weight Loss (0.25 kg/week Approx.)</div>
+                <div class="calories" id="mild-loss-calories">0</div>
+
+                <div class="section-title">Heavy Weight Loss (0.50 kg/week Approx.)</div>
+                <div class="calories" id="heavy-loss-calories">0</div>
+
+                <div class="section-title">Extreme Weight Loss (0.75 kg/week Approx.)</div>
+                <div class="calories" id="extreme-loss-calories">0</div>
+            </div>
+        </div>
+
+        <!-- Calculate Again Button -->
+        <button onclick="window.location.href='srk.html'">Calculate Again</button>
+    </div>
+
+    <script>
+        // Retrieve data from localStorage
+        const name = localStorage.getItem('name');
+        const age = localStorage.getItem('age');
+        const gender = localStorage.getItem('gender');
+        const weight = parseFloat(localStorage.getItem('weight'));
+        const height = parseFloat(localStorage.getItem('height'));
+
+        // Set user name
+        document.getElementById('user-name').innerText = name;
+
+        // Calculate BMI
+        const heightInMeters = height / 100;
+        const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
+        document.getElementById('bmi').innerText = bmi;
+
+        // Calculate Ideal Body Weight (IBW)
+        let idealWeight = 0;
+        if (gender === 'male') {
+            idealWeight = 50 + 0.91 * (height - 152.4);
+        } else {
+            idealWeight = 45.5 + 0.91 * (height - 152.4);
+        }
+        document.getElementById('ideal-weight').innerText = idealWeight.toFixed(2) + ' Kg';
+
+        // Display your current weight
+        document.getElementById('your-weight').innerText = weight.toFixed(2) + ' Kg';
+
+        // Weight difference (to lose)
+        const weightToLose = Math.max(0, (weight - idealWeight)).toFixed(2);
+        document.getElementById('reduce-weight').innerText = weightToLose + ' Kg';
+
+        // Calculate Basal Metabolic Rate (BMR)
+        let bmr = 0;
+        if (gender === 'male') {
+            bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+        } else {
+            bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+        }
+        document.getElementById('bmr').innerText = bmr.toFixed(2) + ' Calories/Day';
+
+        // Calculate Body Fat Percentage (Estimate)
+        const bodyFatPercentage = (1.2 * bmi + 0.23 * age - 5.4 - 10.8 * (gender === 'male' ? 1 : 0)).toFixed(2);
+        document.getElementById('body-fat').innerText = bodyFatPercentage + '%';
+
+        // Show more details on button click
+        function showDetails() {
+            document.getElementById('more-details').style.display = 'block';
+            document.getElementById('details-button').style.display = 'none';
+        }
+
+        // Update recommended calories based on activity level
+        const activitySelect = document.getElementById('activity-level');
+        activitySelect.addEventListener('change', function() {
+            updateCalories(activitySelect.value);
+        });
+        
+        function updateCalories(activity) {
+            let factor = 1.2; // Sedentary
+            if (activity === 'light') factor = 1.375;
+            else if (activity === 'moderate') factor = 1.55;
+            else if (activity === 'active') factor = 1.725;
+            else if (activity === 'very-active') factor = 1.9;
+            
+            const maintainCalories = bmr * factor;
+            document.getElementById('maintain-calories').innerText = maintainCalories.toFixed(1);
+
+            document.getElementById('mild-loss-calories').innerText = (maintainCalories - 250).toFixed(1);
+            document.getElementById('heavy-loss-calories').innerText = (maintainCalories - 500).toFixed(1);
+            document.getElementById('extreme-loss-calories').innerText = (maintainCalories - 750).toFixed(1);
+        }
+
+        // Set default to sedentary
+        updateCalories('sedentary');
+    </script>
+
+</body>
+</html>
